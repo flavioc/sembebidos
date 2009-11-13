@@ -9,7 +9,7 @@ import javax.microedition.io.Datagram;
 public class Connection {
     private static final int HOST_PORT = 67;
     public static final int SEND = 0;
-    public static final int RECIVE = 1;
+    public static final int RECEIVE = 1;
 
 
     private RadiogramConnection conn = null;

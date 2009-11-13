@@ -28,28 +28,11 @@ public class SunSpotHostApplication {
      * Print out our radio address.
      */
     public void run() {
-        long ourAddr = RadioFactory.getRadioPolicyManager().getIEEEAddress();
-        System.out.println("Our radio address = " + IEEEAddress.toDottedHex(ourAddr));
-        //System.exit(0);
-
-        try {
-            conn = (RadiogramConnection)Connector.open("radiogram://:" + HOST_PORT);
-            dg = conn.newDatagram(conn.getMaximumLength());
-        } catch (Exception e) {
-            System.err.println("error " + e.getMessage());
-            System.exit(1);
-        }
-
         while(true) {
-            try {
-                conn.receive(dg);
-                long x = dg.readLong();
-                x = x | 0x000000000000ffff;
-                System.out.println(x);
-            } catch(Exception e) {
-                System.err.println("Erro: " + e.getMessage());
-            }
+            sconn.hostSend(0, 12345);
+            rconn.hostReceive();
         }
+        
     }
 
     /**
