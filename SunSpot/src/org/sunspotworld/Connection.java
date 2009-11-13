@@ -12,7 +12,6 @@ public class Connection {
     public static final int SEND = 0;
     public static final int RECEIVE = 1;
 
-
     private RadiogramConnection conn = null;
     private Datagram dg;
     private long mac;
@@ -29,47 +28,8 @@ public class Connection {
         }
     }
 
-    public void send (int value) {
-        try {
-            dg = conn.newDatagram(conn.getMaximumLength());
-            // iniciar datagrama
-            dg.writeLong(mac);                         // escrever mac
-            dg.writeLong(System.currentTimeMillis());  // escrever o tempo actual
-            dg.writeInt(0);                         // escrever o tipo
-            dg.writeInt(value);                        // escrever o valor
-            conn.send(dg);                             // enviar o pacote
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void send (double value) {
-        try {
-            dg = conn.newDatagram(conn.getMaximumLength());
-            // iniciar datagrama
-            dg.writeLong(mac);                         // escrever mac
-            dg.writeLong(System.currentTimeMillis());  // escrever o tempo actual
-            dg.writeInt(1);                         // escrever o tipo
-            dg.writeDouble(value);                     // escrever o valor
-            conn.send(dg);                             // enviar o pacote
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void send (double value1, double value2) {
-        try {
-            dg = conn.newDatagram(conn.getMaximumLength());
-            // iniciar datagrama
-            dg.writeLong(mac);                         // escrever mac
-            dg.writeLong(System.currentTimeMillis());  // escrever o tempo actual
-            dg.writeInt(2);                         // escrever o tipo
-            dg.writeDouble(value1);                    // escrever o valor
-            dg.writeDouble(value2);                    // escrever o valor
-            conn.send(dg);                             // enviar o pacote
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    public void send (Message msg) {
+        msg.send(conn);
     }
 
     public void hostSend (int type, int newValue) {
@@ -112,15 +72,18 @@ public class Connection {
             dg = conn.newDatagram(conn.getMaximumLength());
             conn.receive(dg);
             conn.setTimeout(1000);
-            switch (dg.readInt()) {
+            int type = dg.readInt();
+            int val = dg.readInt();
+            System.out.println("NEW TASK PERIOD " + val);
+            switch (type) {
                 case 0:
-                    l.setTaskPeriod(dg.readInt());
+                    l.setTaskPeriod(val);
                     break;
                 case 1:
-                    t.setTaskPeriod(dg.readInt());
+                    t.setTaskPeriod(val);
                     break;
                 case 2:
-                    m.setTaskPeriod(dg.readInt());
+                    m.setTaskPeriod(val);
                     break;
             }
         }catch (IOException ex) {

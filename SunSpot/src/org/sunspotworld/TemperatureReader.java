@@ -15,7 +15,7 @@ public class TemperatureReader extends PeriodicTask {
         try {
             sin.setOn(1);
             double celsius = tempInput.getCelsius();
-            conn.send(celsius);
+            conn.send(new Message(celsius));
             System.out.println("Temperature is " + celsius);
             Utils.sleep(500);
             sin.setOff(1);

@@ -15,7 +15,7 @@ public class LuminosityReader extends PeriodicTask {
         try {
             sin.setOn(0);
             int val = lightSensor.getValue();
-            conn.send(val);
+            conn.send(new Message(val));
             System.out.println("Light sensor: " + val);
             Utils.sleep(500);
             sin.setOff(0);

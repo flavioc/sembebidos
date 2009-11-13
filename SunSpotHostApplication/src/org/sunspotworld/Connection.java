@@ -6,17 +6,18 @@ import java.io.IOException;
 import javax.microedition.io.Connector;
 import javax.microedition.io.Datagram;
 
-public class Connection {
+public class Connection
+{
     private static final int HOST_PORT = 67;
     public static final int SEND = 0;
     public static final int RECEIVE = 1;
-    
     
     private RadiogramConnection conn = null;
     private Datagram dg;
     private long mac;
 
-    public Connection (int val) {
+    public Connection (int val)
+    {
         try {
             mac = RadioFactory.getRadioPolicyManager().getIEEEAddress();
             if (val == SEND)
@@ -28,50 +29,13 @@ public class Connection {
         }
     }
 
-    public void send (int value) {
-        try {
-            dg = conn.newDatagram(conn.getMaximumLength());
-            // iniciar datagrama
-            dg.writeLong(mac);                         // escrever mac
-            dg.writeLong(System.currentTimeMillis());  // escrever o tempo actual
-            dg.writeInt(0);                         // escrever o tipo
-            dg.writeInt(value);                        // escrever o valor
-            conn.send(dg);                             // enviar o pacote
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    public void send (Message msg)
+    {
+        msg.send(conn);
     }
 
-    public void send (double value) {
-        try {
-            dg = conn.newDatagram(conn.getMaximumLength());
-            // iniciar datagrama
-            dg.writeLong(mac);                         // escrever mac
-            dg.writeLong(System.currentTimeMillis());  // escrever o tempo actual
-            dg.writeInt(1);                         // escrever o tipo
-            dg.writeDouble(value);                     // escrever o valor
-            conn.send(dg);                             // enviar o pacote
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void send (double value1, double value2) {
-        try {
-            dg = conn.newDatagram(conn.getMaximumLength());
-            // iniciar datagrama
-            dg.writeLong(mac);                         // escrever mac
-            dg.writeLong(System.currentTimeMillis());  // escrever o tempo actual
-            dg.writeInt(2);                         // escrever o tipo
-            dg.writeDouble(value1);                    // escrever o valor
-            dg.writeDouble(value2);                    // escrever o valor
-            conn.send(dg);                             // enviar o pacote
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void hostReceive () {
+    public void hostReceive ()
+    {
         try {
             dg = conn.newDatagram(conn.getMaximumLength());
             conn.receive(dg);
@@ -95,7 +59,8 @@ public class Connection {
         }
     }
 
-    public void hostSend (int type, int newValue) {
+    public void hostSend(int type, int newValue)
+    {
         try {
             dg = conn.newDatagram(conn.getMaximumLength());
             dg.writeInt(type);
@@ -106,15 +71,15 @@ public class Connection {
         }
     }
     
-    public void spotReceive () {
+    public void spotReceive()
+    {
         try {
             dg = conn.newDatagram(conn.getMaximumLength());
             conn.receive(dg);
             conn.setTimeout(1000);
             System.out.println(dg.getLength());
-        }catch (IOException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
-
     }
 }

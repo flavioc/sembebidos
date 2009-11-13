@@ -27,7 +27,8 @@ public class SunSpotHostApplication {
     /**
      * Print out our radio address.
      */
-    public void run() {
+    public void run()
+    {
         while(true) {
             sconn.hostSend(0, 12345);
             rconn.hostReceive();
@@ -43,10 +44,9 @@ public class SunSpotHostApplication {
     public static void main(String[] args)
     {
         SunSpotHostApplication app = new SunSpotHostApplication();
-        System.out.println("OLA");
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                System.out.println("ESTOU AQUI");
                 new SunSpotWindow().setVisible(true);
             }
         });

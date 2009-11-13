@@ -16,7 +16,7 @@ public class MovementReader extends PeriodicTask {
             sin.setOn(2);
             double accelX = accel.getAccelX();
             double accelY = accel.getAccelY();
-            conn.send(accelX, accelY);
+            conn.send(new Message(accelX, accelY));
             System.out.println("ACCEL X " + accelX + " ACCEL Y " + accelY);
             Utils.sleep(500);
             sin.setOff(2);
