@@ -169,6 +169,11 @@ public class SunSpotWindow extends javax.swing.JFrame {
         labelLuminosity.setText("" + sliderLuminosity.getValue() + " s");
     }//GEN-LAST:event_luminosityValueChanged
 
+    public void addMessage(Message m)
+    {
+        String s = m.toString() + "\n";
+        jTextArea1.append(s);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
