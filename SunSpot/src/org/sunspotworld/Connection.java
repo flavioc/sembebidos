@@ -82,7 +82,7 @@ public class Connection {
         }
     }
 
-    public void hostRecive () {
+    public void hostReceive () {
         try {
             dg = conn.newDatagram(conn.getMaximumLength());
             conn.receive(dg);
@@ -106,7 +106,7 @@ public class Connection {
         }
     }
 
-    public void spotRecive (LuminosityReader l, TemperatureReader t, MovementReader m) {
+    public void spotReceive (LuminosityReader l, TemperatureReader t, MovementReader m) {
         try {
             dg = conn.newDatagram(conn.getMaximumLength());
             conn.receive(dg);
