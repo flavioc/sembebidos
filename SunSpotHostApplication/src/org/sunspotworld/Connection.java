@@ -3,6 +3,8 @@ package org.sunspotworld;
 import com.sun.spot.io.j2me.radiogram.RadiogramConnection;
 import com.sun.spot.peripheral.radio.RadioFactory;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.microedition.io.Connector;
 import javax.microedition.io.Datagram;
 
@@ -34,28 +36,13 @@ public class Connection
         msg.send(conn);
     }
 
-    public void hostReceive ()
+    public Message hostReceive ()
     {
         try {
-            dg = conn.newDatagram(conn.getMaximumLength());
-            conn.receive(dg);
-            System.out.println(dg.getAddress());
-            System.out.print("From: "+Long.toHexString(dg.readLong()));
-            System.out.print(", timestamp "+dg.readLong());
-
-            switch(dg.readInt()){
-                case 0:
-                    System.out.println(" luminosity is "+dg.readInt());
-                    break;
-                case 1:
-                    System.out.println(" temperature is "+dg.readDouble());
-                    break;
-                case 2:
-                    System.out.println(" X acceleration is "+dg.readDouble());
-                    break;
-            }
+            return new Message(conn);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
 
@@ -66,18 +53,6 @@ public class Connection
             dg.writeInt(type);
             dg.writeInt(newValue);
             conn.send(dg);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-    
-    public void spotReceive()
-    {
-        try {
-            dg = conn.newDatagram(conn.getMaximumLength());
-            conn.receive(dg);
-            conn.setTimeout(1000);
-            System.out.println(dg.getLength());
         } catch (IOException ex) {
             ex.printStackTrace();
         }

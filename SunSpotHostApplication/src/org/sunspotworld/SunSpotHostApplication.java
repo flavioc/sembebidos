@@ -23,6 +23,7 @@ public class SunSpotHostApplication {
 
     private Connection sconn = new Connection(Connection.SEND);
     private Connection rconn = new Connection(Connection.RECEIVE);
+    private static SunSpotWindow window = null;
 
     /**
      * Print out our radio address.
@@ -31,9 +32,11 @@ public class SunSpotHostApplication {
     {
         while(true) {
             sconn.hostSend(0, 12345);
-            rconn.hostReceive();
+            Message m = rconn.hostReceive();
+            if(m != null)
+                window.addMessage(m);
+                
         }
-        
     }
 
     /**
@@ -44,12 +47,14 @@ public class SunSpotHostApplication {
     public static void main(String[] args)
     {
         SunSpotHostApplication app = new SunSpotHostApplication();
-        
+     
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SunSpotWindow().setVisible(true);
+                window = new SunSpotWindow();
+                window.setVisible(true);
             }
         });
+        
         app.run();
         
     }
