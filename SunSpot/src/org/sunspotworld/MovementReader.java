@@ -7,6 +7,9 @@ import java.io.IOException;
 
 public class MovementReader extends PeriodicTask {
     private static int MOVEMENT_PERIOD = 4000; // 4 seconds
+    private static final double DELTA = 0.1;
+    private static double lastValueX = 0;
+    private static double lastValueY = 0;
     private IAccelerometer3D accel = EDemoBoard.getInstance().getAccelerometer();
     private Connection conn = null;
     private Sinalize sin = null;
@@ -16,7 +19,14 @@ public class MovementReader extends PeriodicTask {
             sin.setOn(2);
             double accelX = accel.getAccelX();
             double accelY = accel.getAccelY();
-            conn.send(new Message(accelX, accelY));
+
+            if ((accelX>lastValueX-DELTA && accelX<lastValueX-DELTA) && (accelY>lastValueY-DELTA && accelY<lastValueY-DELTA))
+                System.out.println("Moviment in DELTA");
+            else {
+                conn.send(accelX, accelY);
+                lastValueX = accelX;
+                lastValueY = accelY;
+            }
             System.out.println("ACCEL X " + accelX + " ACCEL Y " + accelY);
             Utils.sleep(500);
             sin.setOff(2);

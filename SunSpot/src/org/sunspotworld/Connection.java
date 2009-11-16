@@ -1,6 +1,5 @@
 package org.sunspotworld;
 
-
 import com.sun.spot.io.j2me.radiogram.RadiogramConnection;
 import com.sun.spot.peripheral.radio.RadioFactory;
 import java.io.IOException;
@@ -10,7 +9,8 @@ import javax.microedition.io.Datagram;
 public class Connection {
     private static final int HOST_PORT = 67;
     public static final int SEND = 0;
-    public static final int RECEIVE = 1;
+    public static final int RECIVE = 1;
+
 
     private RadiogramConnection conn = null;
     private Datagram dg;
@@ -28,8 +28,47 @@ public class Connection {
         }
     }
 
-    public void send (Message msg) {
-        msg.send(conn);
+    public void send (int value) {
+        try {
+            dg = conn.newDatagram(conn.getMaximumLength());
+            // iniciar datagrama
+            dg.writeLong(mac);                         // escrever mac
+            dg.writeLong(System.currentTimeMillis());  // escrever o tempo actual
+            dg.writeInt(0);                         // escrever o tipo
+            dg.writeInt(value);                        // escrever o valor
+            conn.send(dg);                             // enviar o pacote
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void send (double value) {
+        try {
+            dg = conn.newDatagram(conn.getMaximumLength());
+            // iniciar datagrama
+            dg.writeLong(mac);                         // escrever mac
+            dg.writeLong(System.currentTimeMillis());  // escrever o tempo actual
+            dg.writeInt(1);                         // escrever o tipo
+            dg.writeDouble(value);                     // escrever o valor
+            conn.send(dg);                             // enviar o pacote
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void send (double value1, double value2) {
+        try {
+            dg = conn.newDatagram(conn.getMaximumLength());
+            // iniciar datagrama
+            dg.writeLong(mac);                         // escrever mac
+            dg.writeLong(System.currentTimeMillis());  // escrever o tempo actual
+            dg.writeInt(2);                         // escrever o tipo
+            dg.writeDouble(value1);                    // escrever o valor
+            dg.writeDouble(value2);                    // escrever o valor
+            conn.send(dg);                             // enviar o pacote
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void hostSend (int type, int newValue) {
@@ -43,7 +82,7 @@ public class Connection {
         }
     }
 
-    public void hostReceive () {
+    public void hostRecive () {
         try {
             dg = conn.newDatagram(conn.getMaximumLength());
             conn.receive(dg);
@@ -67,23 +106,20 @@ public class Connection {
         }
     }
 
-    public void spotReceive (LuminosityReader l, TemperatureReader t, MovementReader m) {
+    public void spotRecive (LuminosityReader l, TemperatureReader t, MovementReader m) {
         try {
             dg = conn.newDatagram(conn.getMaximumLength());
             conn.receive(dg);
             conn.setTimeout(1000);
-            int type = dg.readInt();
-            int val = dg.readInt();
-            System.out.println("NEW TASK PERIOD " + val);
-            switch (type) {
+            switch (dg.readInt()) {
                 case 0:
-                    l.setTaskPeriod(val);
+                    l.setTaskPeriod(dg.readInt());
                     break;
                 case 1:
-                    t.setTaskPeriod(val);
+                    t.setTaskPeriod(dg.readInt());
                     break;
                 case 2:
-                    m.setTaskPeriod(val);
+                    m.setTaskPeriod(dg.readInt());
                     break;
             }
         }catch (IOException ex) {

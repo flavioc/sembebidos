@@ -4,7 +4,7 @@ import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 
 public class StartApplication extends MIDlet {
-    private Connection conn = new Connection(0);
+    private Connection conn = new Connection(Connection.SEND);
     private Sinalize sin = new Sinalize();
     
     private LuminosityReader lightReader = new LuminosityReader(conn, sin);

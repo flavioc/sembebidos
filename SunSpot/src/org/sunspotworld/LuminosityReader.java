@@ -7,6 +7,8 @@ import java.io.IOException;
 
 public class LuminosityReader extends PeriodicTask {
     private static int LUMINOSITY_PERIOD = 3000; // 3 seconds
+    private static final int DELTA = 5;
+    private static int lastValue = 0;
     private ILightSensor lightSensor = EDemoBoard.getInstance().getLightSensor();
     private Connection conn;
     private Sinalize sin = null;
@@ -15,7 +17,12 @@ public class LuminosityReader extends PeriodicTask {
         try {
             sin.setOn(0);
             int val = lightSensor.getValue();
-            conn.send(new Message(val));
+            if (val >lastValue-DELTA && val<lastValue+DELTA)
+                System.out.println("Luminosity in DELTA");
+            else {
+                conn.send(val);
+                lastValue = val;
+            }
             System.out.println("Light sensor: " + val);
             Utils.sleep(500);
             sin.setOff(0);

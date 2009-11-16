@@ -9,7 +9,7 @@ public class SpotListen extends PeriodicTask {
 
     // verifica 
     public void doTask() {
-        rconn.spotReceive(lr, tr, mr);
+        rconn.spotRecive(lr, tr, mr);
     }
 
     public SpotListen (LuminosityReader l, TemperatureReader t, MovementReader m) {
