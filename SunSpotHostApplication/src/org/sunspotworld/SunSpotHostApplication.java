@@ -6,19 +6,6 @@
 
 package org.sunspotworld;
 
-import com.sun.spot.peripheral.radio.RadioFactory;
-import com.sun.spot.peripheral.radio.IRadioPolicyManager;
-import com.sun.spot.io.j2me.radiostream.*;
-import com.sun.spot.io.j2me.radiogram.*;
-import com.sun.spot.util.IEEEAddress;
-
-import java.io.*;
-import javax.microedition.io.*;
-
-
-/**
- * Sample Sun SPOT host application
- */
 public class SunSpotHostApplication {
 
     private Connection sconn = new Connection(Connection.SEND);
@@ -39,6 +26,11 @@ public class SunSpotHostApplication {
         }
     }
 
+    public Connection getSConnection()
+    {
+        return sconn;
+    }
+
     /**
      * Start up the host application.
      *
@@ -47,10 +39,11 @@ public class SunSpotHostApplication {
     public static void main(String[] args)
     {
         SunSpotHostApplication app = new SunSpotHostApplication();
-     
+        final Connection sconn = app.getSConnection();
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                window = new SunSpotWindow();
+                window = new SunSpotWindow(sconn);
                 window.setVisible(true);
             }
         });

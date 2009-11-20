@@ -22,17 +22,25 @@ public class SunSpotWindow extends javax.swing.JFrame {
     private int oldSecondsMovement = 4;
     private int oldSecondsLuminosity = 3;
     private int oldSecondsTemperature = 2;
+
+    private Connection sconn = null;
     
     private int secondsMovement = 4;
     private int secondsLuminosity = 3;
     private int secondsTemperature = 2;
     
     /** Creates new form Window */
-    public SunSpotWindow() {
+    public SunSpotWindow(Connection conn) {
         initComponents();
+        this.sconn = conn;
         sliderMovement.setValue(oldSecondsMovement);
         sliderLuminosity.setValue(oldSecondsLuminosity);
         sliderTemperature.setValue(oldSecondsTemperature);
+        refresh();
+    }
+
+    private void refresh()
+    {
         movementValueChanged(null);
         temperatureValueChanged(null);
         luminosityValueChanged(null);
@@ -59,7 +67,8 @@ public class SunSpotWindow extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         labelMovement = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        broadcastButton = new javax.swing.JButton();
+        resetButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sun spot host application");
@@ -109,10 +118,17 @@ public class SunSpotWindow extends javax.swing.JFrame {
 
         jLabel1.setText("Luminosidade:");
 
-        jButton1.setText("Broadcast");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        broadcastButton.setText("Broadcast");
+        broadcastButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                broadcastButtonActionPerformed(evt);
+            }
+        });
+
+        resetButton.setText("Reset");
+        resetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetButtonActionPerformed(evt);
             }
         });
 
@@ -143,9 +159,11 @@ public class SunSpotWindow extends javax.swing.JFrame {
                     .add(labelLuminosity, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 34, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(99, Short.MAX_VALUE)
-                .add(jButton1)
-                .add(136, 136, 136))
+                .addContainerGap(84, Short.MAX_VALUE)
+                .add(resetButton)
+                .add(18, 18, 18)
+                .add(broadcastButton)
+                .add(55, 55, 55))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -166,7 +184,9 @@ public class SunSpotWindow extends javax.swing.JFrame {
                     .add(jLabel3)
                     .add(labelMovement))
                 .add(18, 18, 18)
-                .add(jButton1)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(broadcastButton)
+                    .add(resetButton))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -228,9 +248,18 @@ public class SunSpotWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_luminosityValueChanged
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void broadcastButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_broadcastButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        
+    }//GEN-LAST:event_broadcastButtonActionPerformed
+
+    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
+        // TODO add your handling code here:
+        sliderLuminosity.setValue(oldSecondsLuminosity);
+        sliderMovement.setValue(oldSecondsMovement);
+        sliderTemperature.setValue(oldSecondsTemperature);
+        refresh();
+    }//GEN-LAST:event_resetButtonActionPerformed
 
     public void addMessage(Message m)
     {
@@ -239,7 +268,7 @@ public class SunSpotWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton broadcastButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -249,6 +278,7 @@ public class SunSpotWindow extends javax.swing.JFrame {
     private javax.swing.JLabel labelLuminosity;
     private javax.swing.JLabel labelMovement;
     private javax.swing.JLabel labelTemperature;
+    private javax.swing.JButton resetButton;
     private javax.swing.JSlider sliderLuminosity;
     private javax.swing.JSlider sliderMovement;
     private javax.swing.JSlider sliderTemperature;
