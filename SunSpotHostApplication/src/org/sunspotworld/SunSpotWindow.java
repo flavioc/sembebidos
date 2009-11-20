@@ -72,6 +72,7 @@ public class SunSpotWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sun spot host application");
+        setResizable(false);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -171,8 +172,8 @@ public class SunSpotWindow extends javax.swing.JFrame {
                 .add(16, 16, 16)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabel1)
-                    .add(sliderLuminosity, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(labelLuminosity, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(labelLuminosity, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 14, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(sliderLuminosity, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(sliderTemperature, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 29, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -195,22 +196,23 @@ public class SunSpotWindow extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .add(6, 6, 6)
-                        .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 589, Short.MAX_VALUE))
+                    .add(layout.createSequentialGroup()
+                        .add(126, 126, 126)
+                        .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .add(24, 24, 24)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 236, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 283, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(18, 18, 18)
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
@@ -249,22 +251,33 @@ public class SunSpotWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_luminosityValueChanged
 
     private void broadcastButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_broadcastButtonActionPerformed
-        // TODO add your handling code here:
-        if(oldSecondsLuminosity != secondsLuminosity)
+        boolean any = false;
+
+        if(oldSecondsLuminosity != secondsLuminosity) {
             sconn.hostSend(Message.LUMINOSITY, secondsLuminosity);
+            newText("Broadcasted new period for luminosity: " + secondsLuminosity + "s");
+            any = true;
+        }
 
-        if(oldSecondsTemperature != secondsTemperature)
+        if(oldSecondsTemperature != secondsTemperature) {
             sconn.hostSend(Message.TEMPERATURE, secondsTemperature);
+            newText("Broadcasted new period for temperature: " + secondsTemperature + "s");
+            any = true;
+        }
 
-        if(oldSecondsMovement != secondsMovement)
+        if(oldSecondsMovement != secondsMovement) {
             sconn.hostSend(Message.MOVEMENT, secondsMovement);
+            newText("Broadcasted new period for movement: " + secondsMovement + "s");
+            any = true;
+        }
 
-        oldSecondsMovement = secondsMovement;
-        oldSecondsLuminosity = secondsLuminosity;
-        oldSecondsTemperature = secondsTemperature;
+        if(any) {
+            oldSecondsMovement = secondsMovement;
+            oldSecondsLuminosity = secondsLuminosity;
+            oldSecondsTemperature = secondsTemperature;
 
-        newText("Broadcasted new values");
-        refresh();
+            refresh();
+        }
     }//GEN-LAST:event_broadcastButtonActionPerformed
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed

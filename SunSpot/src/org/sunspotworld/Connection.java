@@ -30,7 +30,8 @@ public class Connection
 
     public void send (Message msg)
     {
-        msg.send(conn);
+        if(msg != null)
+            msg.send(conn);
     }
 
     public int[] spotReceive () {
