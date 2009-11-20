@@ -33,55 +33,37 @@ public class Connection
         msg.send(conn);
     }
 
-    public Message hostReceive ()
-    {
+    public int[] spotReceive () {
         try {
-            return new Message(conn);
+            dg = conn.newDatagram(conn.getMaximumLength());
+            conn.setTimeout(0);
+            conn.receive(dg);
+
+            int msg_type = dg.readInt();
+
+            if(msg_type != Message.CHANGE_VALUES)
+                return null;
+            
+            int what = dg.readInt();
+            int period = dg.readInt() * 1000;
+
+            int[] ret = new int[2];
+
+            ret[0] = what;
+            ret[1] = period;
+
+            return ret;
+            
         } catch (IOException ex) {
-            System.err.println(ex.getMessage());
             return null;
         }
     }
 
-    public void hostSend(int type, int newValue)
+    public void close()
     {
         try {
-            dg = conn.newDatagram(conn.getMaximumLength());
-            dg.writeInt(type);
-            dg.writeInt(newValue);
-            conn.send(dg);
+            conn.close();
         } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void spotReceive (LuminosityReader l, TemperatureReader t, MovementReader m) {
-        try {
-            dg = conn.newDatagram(conn.getMaximumLength());
-            conn.receive(dg);
-            conn.setTimeout(400);
-            int what = dg.readInt();
-            int period = dg.readInt() * 1000;
-            System.out.println("New period: " + what + " " + period);
-            switch (what) {
-                case Message.LUMINOSITY:
-                    l.pause();
-                    l.setTaskPeriod(period);
-                    l.resume();
-                    break;
-                case Message.TEMPERATURE:
-                    t.pause();
-                    t.setTaskPeriod(period);
-                    t.resume();
-                    break;
-                case Message.MOVEMENT:
-                    m.pause();
-                    m.setTaskPeriod(period);
-                    m.resume();
-                    break;
-            }
-        }catch (IOException ex) {
-            System.err.println("Timeout pah!");
         }
     }
 }

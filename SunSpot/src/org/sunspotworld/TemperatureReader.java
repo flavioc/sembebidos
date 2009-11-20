@@ -15,20 +15,24 @@ public class TemperatureReader extends PeriodicTask {
     
     public void doTask() {
         try {
-            sin.setOn(1);
+            sin.setOn(Message.TEMPERATURE);
             double celsius = tempInput.getCelsius();
-            if (celsius> lastValue-DELTA && celsius < lastValue+DELTA)
+            if(MyUtils.betweenIntervalDoubleDelta(lastValue, DELTA, celsius))
                 System.out.println("Temparature in DELTA");
             else {
                 conn.send(new Message(celsius));
                 lastValue = celsius;
                 System.out.println("Temperature is " + celsius);
             }
-            Utils.sleep(500);
-            sin.setOff(1);
+            Utils.sleep(Sinalize.LED_TIME);
+            sin.setOff(Message.TEMPERATURE);
         } catch (IOException ex) {
-            System.out.println(ex);
+            System.err.println("TemperatureReader doTask Exception: " + ex.getMessage());
         }
+    }
+
+    public void stopping() {
+        sin.setOff(Message.TEMPERATURE);
     }
 
     public TemperatureReader(Connection c, Sinalize s) {

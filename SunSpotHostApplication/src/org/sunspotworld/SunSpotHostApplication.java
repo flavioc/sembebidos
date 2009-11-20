@@ -6,22 +6,23 @@
 
 package org.sunspotworld;
 
+import com.sun.spot.util.Utils;
+
 public class SunSpotHostApplication {
 
     private Connection sconn = new Connection(Connection.SEND);
     private Connection rconn = new Connection(Connection.RECEIVE);
     private static SunSpotWindow window = null;
+    private static final int TIME_SLEEP = 500;
 
-    /**
-     * Print out our radio address.
-     */
     public void run()
     {
         while(true) {
             Message m = rconn.hostReceive();
             if(m != null)
                 window.addMessage(m);
-                
+            else
+                Utils.sleep(TIME_SLEEP);
         }
     }
 

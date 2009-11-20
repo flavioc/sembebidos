@@ -12,23 +12,31 @@ public class LuminosityReader extends PeriodicTask {
     private ILightSensor lightSensor = EDemoBoard.getInstance().getLightSensor();
     private Connection conn;
     private Sinalize sin = null;
-    
-    public void doTask() {
+
+    public void doTask()
+    {
         try {
-            sin.setOn(0);
+            sin.setOn(Message.LUMINOSITY);
             int val = lightSensor.getValue();
-            if (val >lastValue-DELTA && val<lastValue+DELTA)
+
+            if(MyUtils.betweenIntervalIntDelta(lastValue, DELTA, val))
                 System.out.println("Luminosity in DELTA");
             else {
                 System.out.println("Light sensor: " + val);
                 conn.send(new Message(val));
                 lastValue = val;
             }
-            Utils.sleep(500);
-            sin.setOff(0);
+            
+            Utils.sleep(Sinalize.LED_TIME);
+            sin.setOff(Message.LUMINOSITY);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            System.out.println("LuminosityReader doTask Exception: " + ex.getMessage());
         }
+    }
+
+    public void stopping()
+    {
+        sin.setOff(Message.LUMINOSITY);
     }
 
     public LuminosityReader(Connection c, Sinalize s) {

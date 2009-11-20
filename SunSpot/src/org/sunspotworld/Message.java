@@ -14,9 +14,12 @@ import com.sun.spot.peripheral.radio.RadioFactory;
  * @author flaviocruz
  */
 public class Message {
+    public final static int CHANGE_VALUES = 0;
+    public final static int SENSOR = 1;
     public final static int LUMINOSITY = 0;
     public final static int MOVEMENT = 1;
     public final static int TEMPERATURE = 2;
+    public final static int UNKNOWN = 3;
 
     private int type;
     private long address;
@@ -73,6 +76,7 @@ public class Message {
     {
         try {
             Datagram dg = conn.newDatagram(conn.getMaximumLength());
+            dg.writeInt(SENSOR);
             dg.writeLong(RadioFactory.getRadioPolicyManager().getIEEEAddress());
             dg.writeLong(System.currentTimeMillis());
             dg.writeInt(type);

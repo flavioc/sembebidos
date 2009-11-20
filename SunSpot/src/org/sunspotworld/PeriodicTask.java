@@ -63,6 +63,7 @@ public abstract class PeriodicTask implements IService {
     private String name = "Periodic Task Execution";
     protected int priority = Thread.NORM_PRIORITY;
     protected IAT91_TC timer = null;
+    private boolean first = true;
     
     /**
      * Creates a new instance of PeriodicTask.
@@ -159,16 +160,19 @@ public abstract class PeriodicTask implements IService {
             throw new IllegalStateException("Cannot change the task period for a running task loop.");
         }
         taskPeriod = period;
-        taskPeriodCount = 0;
-        clk_index = -1;
-        if (timer != null) {
-            for (int i = 0; i < clock.length; i++) {    // use fastest possible clock
-                if (taskPeriod <= max_duration[i]) {
-                    clk_index = i;
-                    taskPeriodCount = (int)(taskPeriod * count_per_msec[clk_index]);
-                    break;
+        if(first) {
+            taskPeriodCount = 0;
+            clk_index = -1;
+            if (timer != null) {
+                for (int i = 0; i < clock.length; i++) {    // use fastest possible clock
+                    if (taskPeriod <= max_duration[i]) {
+                        clk_index = i;
+                        taskPeriodCount = (int)(taskPeriod * count_per_msec[clk_index]);
+                        break;
+                    }
                 }
             }
+            first = false;
         }
     }
 
@@ -254,15 +258,16 @@ public abstract class PeriodicTask implements IService {
                 }
                 sleep_til += taskPeriod;
             }
-            
+
             doTask();               // Perform periodic task defined in subclass
             
         }
+        status = STOPPED;
         if (clk_index >= 0) {
             timer.disable();
         }
+        System.out.println("STOP");
         stopping();
-        status = STOPPED;
     }
 
 
@@ -298,12 +303,15 @@ public abstract class PeriodicTask implements IService {
             status = STARTING;
             thread = new Thread() {
                 public void run() {
+                    System.out.println("STARTING TASK");
                     runTask();
                 }
             };
             thread.setPriority(priority);
             thread.start();
             Thread.yield();
+        } else {
+            System.out.println("NOT STARTING...");
         }
         return true;
     }

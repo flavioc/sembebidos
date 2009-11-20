@@ -16,11 +16,12 @@ public class MovementReader extends PeriodicTask {
 
     public void doTask() {
         try {
-            sin.setOn(2);
+            sin.setOn(Message.MOVEMENT);
             double accelX = accel.getAccelX();
             double accelY = accel.getAccelY();
 
-            if ((accelX>lastValueX-DELTA && accelX<lastValueX+DELTA) && (accelY>lastValueY-DELTA && accelY<lastValueY+DELTA))
+            if(MyUtils.betweenIntervalDoubleDelta(lastValueX, DELTA, accelX)
+              && MyUtils.betweenIntervalDoubleDelta(lastValueY, DELTA, accelY))
                 System.out.println("Moviment in DELTA");
             else {
                 conn.send(new Message(accelX, accelY));
@@ -28,11 +29,16 @@ public class MovementReader extends PeriodicTask {
                 lastValueY = accelY;
                 System.out.println("ACCEL X " + accelX + " ACCEL Y " + accelY);
             }
-            Utils.sleep(500);
-            sin.setOff(2);
+            Utils.sleep(Sinalize.LED_TIME);
+            sin.setOff(Message.MOVEMENT);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            System.err.println("MovementReader doTask Exception: " + ex.getMessage());
         }
+    }
+
+    public void stopping ()
+    {
+        sin.setOff(Message.MOVEMENT);
     }
 
     public MovementReader(Connection c, Sinalize s) {

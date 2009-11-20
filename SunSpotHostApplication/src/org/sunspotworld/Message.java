@@ -17,6 +17,8 @@ public class Message {
     public final static int LUMINOSITY = 0;
     public final static int MOVEMENT = 1;
     public final static int TEMPERATURE = 2;
+    public final static int CHANGE_VALUES = 0;
+    public final static int SENSOR = 1;
 
     private int type;
     private long address;
@@ -44,10 +46,16 @@ public class Message {
         this.dData1 = val;
     }
 
-    public Message(RadiogramConnection conn) throws IOException
+    public Message(RadiogramConnection conn) throws IOException, Exception
     {
         Datagram dg = conn.newDatagram(conn.getMaximumLength());
         conn.receive(dg);
+        
+        int msg_type = dg.readInt();
+
+        if(msg_type != SENSOR)
+            throw new Exception("not a sensor message");
+        
         addressString = dg.getAddress();
         address = dg.readLong();
 
@@ -69,33 +77,7 @@ public class Message {
         }
     }
 
-    public void send(RadiogramConnection conn)
-    {
-        try {
-            Datagram dg = conn.newDatagram(conn.getMaximumLength());
-            dg.writeLong(RadioFactory.getRadioPolicyManager().getIEEEAddress());
-            dg.writeLong(System.currentTimeMillis());
-            dg.writeInt(type);
-            
-            switch(type) {
-                case LUMINOSITY:
-                    dg.writeInt(iData1);
-                    break;
-                case MOVEMENT:
-                    dg.writeDouble(dData1);
-                    dg.writeDouble(dData2);
-                    break;
-                case TEMPERATURE:
-                    dg.writeDouble(dData1);
-                    break;
-            }
-            
-            conn.send(dg);
-        } catch (IOException ex) {
-            System.err.println(ex.getMessage());
-        }
-    }
-
+    @Override
     public String toString()
     {
         String reading = "";
@@ -121,7 +103,7 @@ public class Message {
                 val = "" + dData1 + " C";
                 break;
             case MOVEMENT:
-                val = "" + dData1 + " X G " + dData2 + " Y G";
+                val = "(" + dData1 + "G, " + dData2 + "G)";
                 break;
         }
 

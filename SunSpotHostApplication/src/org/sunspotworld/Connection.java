@@ -31,16 +31,11 @@ public class Connection
         }
     }
 
-    public void send (Message msg)
-    {
-        msg.send(conn);
-    }
-
     public Message hostReceive ()
     {
         try {
             return new Message(conn);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
@@ -50,6 +45,7 @@ public class Connection
     {
         try {
             dg = conn.newDatagram(conn.getMaximumLength());
+            dg.writeInt(Message.CHANGE_VALUES);
             dg.writeInt(type);
             dg.writeInt(newValue);
             conn.send(dg);
