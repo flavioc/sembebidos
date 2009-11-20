@@ -250,9 +250,14 @@ public class SunSpotWindow extends javax.swing.JFrame {
 
     private void broadcastButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_broadcastButtonActionPerformed
         // TODO add your handling code here:
-        sconn.hostSend(Message.LUMINOSITY, secondsLuminosity);
-        sconn.hostSend(Message.TEMPERATURE, secondsTemperature);
-        sconn.hostSend(Message.MOVEMENT, secondsMovement);
+        if(oldSecondsLuminosity != secondsLuminosity)
+            sconn.hostSend(Message.LUMINOSITY, secondsLuminosity);
+
+        if(oldSecondsTemperature != secondsTemperature)
+            sconn.hostSend(Message.TEMPERATURE, secondsTemperature);
+
+        if(oldSecondsMovement != secondsMovement)
+            sconn.hostSend(Message.MOVEMENT, secondsMovement);
 
         oldSecondsMovement = secondsMovement;
         oldSecondsLuminosity = secondsLuminosity;

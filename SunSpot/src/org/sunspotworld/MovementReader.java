@@ -20,14 +20,14 @@ public class MovementReader extends PeriodicTask {
             double accelX = accel.getAccelX();
             double accelY = accel.getAccelY();
 
-            if ((accelX>lastValueX-DELTA && accelX<lastValueX-DELTA) && (accelY>lastValueY-DELTA && accelY<lastValueY-DELTA))
+            if ((accelX>lastValueX-DELTA && accelX<lastValueX+DELTA) && (accelY>lastValueY-DELTA && accelY<lastValueY+DELTA))
                 System.out.println("Moviment in DELTA");
             else {
                 conn.send(new Message(accelX, accelY));
                 lastValueX = accelX;
                 lastValueY = accelY;
+                System.out.println("ACCEL X " + accelX + " ACCEL Y " + accelY);
             }
-            System.out.println("ACCEL X " + accelX + " ACCEL Y " + accelY);
             Utils.sleep(500);
             sin.setOff(2);
         } catch (IOException ex) {

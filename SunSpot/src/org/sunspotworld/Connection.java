@@ -59,27 +59,29 @@ public class Connection
         try {
             dg = conn.newDatagram(conn.getMaximumLength());
             conn.receive(dg);
-            conn.setTimeout(1000);
+            conn.setTimeout(400);
+            int what = dg.readInt();
             int period = dg.readInt() * 1000;
-            switch (dg.readInt()) {
-                case 0:
-                    l.stop();
+            System.out.println("New period: " + what + " " + period);
+            switch (what) {
+                case Message.LUMINOSITY:
+                    l.pause();
                     l.setTaskPeriod(period);
-                    l.start();
+                    l.resume();
                     break;
-                case 1:
-                    t.stop();
+                case Message.TEMPERATURE:
+                    t.pause();
                     t.setTaskPeriod(period);
-                    t.start();
+                    t.resume();
                     break;
-                case 2:
-                    m.stop();
+                case Message.MOVEMENT:
+                    m.pause();
                     m.setTaskPeriod(period);
-                    m.start();
+                    m.resume();
                     break;
             }
         }catch (IOException ex) {
-            ex.printStackTrace();
+            System.err.println("Timeout pah!");
         }
     }
 }

@@ -22,8 +22,8 @@ public class TemperatureReader extends PeriodicTask {
             else {
                 conn.send(new Message(celsius));
                 lastValue = celsius;
+                System.out.println("Temperature is " + celsius);
             }
-            System.out.println("Temperature is " + celsius);
             Utils.sleep(500);
             sin.setOff(1);
         } catch (IOException ex) {
