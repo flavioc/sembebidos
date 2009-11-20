@@ -18,7 +18,6 @@ public class SunSpotHostApplication {
     public void run()
     {
         while(true) {
-            sconn.hostSend(0, 12345);
             Message m = rconn.hostReceive();
             if(m != null)
                 window.addMessage(m);

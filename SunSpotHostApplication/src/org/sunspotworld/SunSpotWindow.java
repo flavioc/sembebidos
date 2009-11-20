@@ -250,7 +250,16 @@ public class SunSpotWindow extends javax.swing.JFrame {
 
     private void broadcastButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_broadcastButtonActionPerformed
         // TODO add your handling code here:
-        
+        sconn.hostSend(Message.LUMINOSITY, secondsLuminosity);
+        sconn.hostSend(Message.TEMPERATURE, secondsTemperature);
+        sconn.hostSend(Message.MOVEMENT, secondsMovement);
+
+        oldSecondsMovement = secondsMovement;
+        oldSecondsLuminosity = secondsLuminosity;
+        oldSecondsTemperature = secondsTemperature;
+
+        newText("Broadcasted new values");
+        refresh();
     }//GEN-LAST:event_broadcastButtonActionPerformed
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
@@ -263,8 +272,15 @@ public class SunSpotWindow extends javax.swing.JFrame {
 
     public void addMessage(Message m)
     {
-        String s = m.toString() + "\n";
+        String s = m.toString();
+        newText(s);
+    }
+
+    private void newText(String txt)
+    {
+        String s = txt + "\n";
         jTextArea1.append(s);
+        jTextArea1.setCaretPosition(jTextArea1.getText().length() - 1);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

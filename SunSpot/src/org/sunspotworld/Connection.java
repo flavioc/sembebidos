@@ -60,15 +60,22 @@ public class Connection
             dg = conn.newDatagram(conn.getMaximumLength());
             conn.receive(dg);
             conn.setTimeout(1000);
+            int period = dg.readInt() * 1000;
             switch (dg.readInt()) {
                 case 0:
-                    l.setTaskPeriod(dg.readInt());
+                    l.stop();
+                    l.setTaskPeriod(period);
+                    l.start();
                     break;
                 case 1:
-                    t.setTaskPeriod(dg.readInt());
+                    t.stop();
+                    t.setTaskPeriod(period);
+                    t.start();
                     break;
                 case 2:
-                    m.setTaskPeriod(dg.readInt());
+                    m.stop();
+                    m.setTaskPeriod(period);
+                    m.start();
                     break;
             }
         }catch (IOException ex) {
