@@ -20,7 +20,7 @@ public class TemperatureReader extends PeriodicTask {
             if (celsius> lastValue-DELTA && celsius < lastValue+DELTA)
                 System.out.println("Temparature in DELTA");
             else {
-                conn.send(celsius);
+                conn.send(new Message(celsius));
                 lastValue = celsius;
             }
             System.out.println("Temperature is " + celsius);

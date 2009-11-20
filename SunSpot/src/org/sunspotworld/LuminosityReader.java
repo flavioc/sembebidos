@@ -20,7 +20,7 @@ public class LuminosityReader extends PeriodicTask {
             if (val >lastValue-DELTA && val<lastValue+DELTA)
                 System.out.println("Luminosity in DELTA");
             else {
-                conn.send(val);
+                conn.send(new Message(val));
                 lastValue = val;
             }
             System.out.println("Light sensor: " + val);

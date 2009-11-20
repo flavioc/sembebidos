@@ -23,7 +23,7 @@ public class MovementReader extends PeriodicTask {
             if ((accelX>lastValueX-DELTA && accelX<lastValueX-DELTA) && (accelY>lastValueY-DELTA && accelY<lastValueY-DELTA))
                 System.out.println("Moviment in DELTA");
             else {
-                conn.send(accelX, accelY);
+                conn.send(new Message(accelX, accelY));
                 lastValueX = accelX;
                 lastValueY = accelY;
             }
