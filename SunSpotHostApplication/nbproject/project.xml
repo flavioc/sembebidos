@@ -3,7 +3,7 @@
     <configuration>
         <general-data xmlns="http://www.netbeans.org/ns/freeform-project/1">
             <!--Do not use Project Properties customizer when editing this file manually.-->
-            <name>SunSpotHostApplication2</name>
+            <name>SunSpotHostApplication</name>
             <properties>
                 <property-file>${user.home}/.sunspot.properties</property-file>
                 <property-file>build.properties</property-file>
