@@ -7,6 +7,11 @@
 package org.sunspotworld;
 
 import com.sun.spot.util.Utils;
+import com.sun.spot.peripheral.radio.LowPan;
+import com.sun.spot.peripheral.radio.mhrp.lqrp.LQRPManager;
+import com.sun.spot.peripheral.radio.routing.RouteInfo;
+import com.sun.spot.peripheral.radio.routing.RouteTable;
+import com.sun.spot.peripheral.radio.routing.interfaces.IRoutingManager;
 
 public class SunSpotHostApplication {
 
@@ -17,12 +22,26 @@ public class SunSpotHostApplication {
 
     public void run()
     {
+        LowPan.getInstance().setRoutingManager(LQRPManager.getInstance());
+        IRoutingManager aodv = LowPan.getInstance().getRoutingManager();
+        LQRPManager manager = (LQRPManager)aodv;
+        manager.addEventListener(new Listener());
+
         while(true) {
+            
             Message m = rconn.hostReceive();
-            if(m != null)
+            if(m != null) {
+                RouteTable rt = aodv.getRoutingTable();
+                System.out.println("ROUTE TABLE::::");
+                System.out.println(rt.toString());
+                RouteInfo info = aodv.getRouteInfo(m.getAddress());
+                //System.out.println(info.toString());
+
                 window.addMessage(m);
-            else
+            } else
                 Utils.sleep(TIME_SLEEP);
+
+            
         }
     }
 

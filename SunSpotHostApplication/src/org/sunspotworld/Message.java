@@ -77,6 +77,11 @@ public class Message {
         }
     }
 
+    public long getAddress()
+    {
+        return address;
+    }
+
     @Override
     public String toString()
     {
