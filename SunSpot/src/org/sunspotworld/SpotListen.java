@@ -59,7 +59,7 @@ public class SpotListen extends PeriodicTask {
     }
 
     public SpotListen (LuminosityReader l, TemperatureReader t, MovementReader m) {
-        super(1, READ_PERIOD);
+        super(0, READ_PERIOD);
         lr = l;
         tr = t;
         mr = m;

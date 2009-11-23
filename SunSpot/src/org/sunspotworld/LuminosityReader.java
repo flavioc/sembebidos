@@ -40,7 +40,7 @@ public class LuminosityReader extends PeriodicTask {
     }
 
     public LuminosityReader(Connection c, Sinalize s) {
-        super(2, LUMINOSITY_PERIOD);
+        super(1, LUMINOSITY_PERIOD);
         conn = c;
         sin = s;
     }

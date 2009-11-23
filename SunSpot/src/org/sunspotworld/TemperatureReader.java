@@ -36,7 +36,7 @@ public class TemperatureReader extends PeriodicTask {
     }
 
     public TemperatureReader(Connection c, Sinalize s) {
-        super(1, TEMPERATURE_PERIOD);
+        super(-1, TEMPERATURE_PERIOD);
         conn = c;
         sin = s;
     }
