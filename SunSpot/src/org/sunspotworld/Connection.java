@@ -1,7 +1,6 @@
 package org.sunspotworld;
 
 import com.sun.spot.io.j2me.radiogram.RadiogramConnection;
-import com.sun.spot.peripheral.radio.RadioFactory;
 import java.io.IOException;
 import javax.microedition.io.Connector;
 import javax.microedition.io.Datagram;
@@ -13,12 +12,9 @@ public class Connection
     public static final int RECEIVE = 1;
     private RadiogramConnection conn = null;
     private Datagram dg;
-    private long mac;
-
     public Connection (int val)
     {
         try {
-            mac = RadioFactory.getRadioPolicyManager().getIEEEAddress();
             if (val == SEND)
                 conn = (RadiogramConnection) Connector.open("radiogram://broadcast:" + HOST_PORT);
             else conn = (RadiogramConnection) Connector.open("radiogram://:" + HOST_PORT);

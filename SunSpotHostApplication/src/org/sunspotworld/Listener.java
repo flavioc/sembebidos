@@ -7,10 +7,6 @@ package org.sunspotworld;
 
 import com.sun.spot.peripheral.radio.mhrp.interfaces.IMHEventListener;
 
-/**
- *
- * @author flaviocruz
- */
 public class Listener implements IMHEventListener {
 
     public void RREQSent(long originator, long destination, int hopCount) {

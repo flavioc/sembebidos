@@ -26,18 +26,21 @@ public class SunSpotHostApplication {
         IRoutingManager aodv = LowPan.getInstance().getRoutingManager();
         LQRPManager manager = (LQRPManager)aodv;
         manager.addEventListener(new Listener());
+        //NetManagementServer mgmt = (NetManagementServer)NetManagementServer.getNetManagementServer();
+        //mgmt.start();
 
         while(true) {
             
             Message m = rconn.hostReceive();
             if(m != null) {
+                window.addMessage(m);
                 RouteTable rt = aodv.getRoutingTable();
-                System.out.println("ROUTE TABLE::::");
+                System.out.println("ROUTE TABLE:");
                 System.out.println(rt.toString());
                 RouteInfo info = aodv.getRouteInfo(m.getAddress());
-                //System.out.println(info.toString());
-
-                window.addMessage(m);
+                System.out.println("ROUTE INFO: " + info.toString());
+                //long myaddress = RadioFactory.getRadioPolicyManager().getIEEEAddress();
+                //System.out.println("Route from " + myaddress + " to " + m.getAddress() + ": " + mgmt.requestRoute(myaddress, m.getAddress()));
             } else
                 Utils.sleep(TIME_SLEEP);
 

@@ -266,7 +266,6 @@ public abstract class PeriodicTask implements IService {
         if (clk_index >= 0) {
             timer.disable();
         }
-        System.out.println("STOP");
         stopping();
     }
 
@@ -303,15 +302,12 @@ public abstract class PeriodicTask implements IService {
             status = STARTING;
             thread = new Thread() {
                 public void run() {
-                    System.out.println("STARTING TASK");
                     runTask();
                 }
             };
             thread.setPriority(priority);
             thread.start();
             Thread.yield();
-        } else {
-            System.out.println("NOT STARTING...");
         }
         return true;
     }

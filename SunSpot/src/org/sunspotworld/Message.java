@@ -9,10 +9,6 @@ import javax.microedition.io.Datagram;
 import com.sun.spot.io.j2me.radiogram.RadiogramConnection;
 import com.sun.spot.peripheral.radio.RadioFactory;
 
-/**
- *
- * @author flaviocruz
- */
 public class Message {
     public final static int CHANGE_VALUES = 0;
     public final static int SENSOR = 1;

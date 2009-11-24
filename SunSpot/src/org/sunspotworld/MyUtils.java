@@ -1,9 +1,5 @@
 package org.sunspotworld;
 
-/**
- *
- * @author flaviocruz
- */
 public class MyUtils {
     public static boolean betweenIntervalInt(int val, int min, int max)
     {

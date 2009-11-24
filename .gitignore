@@ -1,1 +1,4 @@
 *.class
+.DS_Store
+SunSpot/suite
+nbproject
