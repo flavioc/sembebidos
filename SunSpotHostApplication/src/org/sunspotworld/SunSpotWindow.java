@@ -25,9 +25,9 @@ public class SunSpotWindow extends javax.swing.JFrame {
 
     private Connection sconn = null;
     
-    private int secondsMovement = 4;
-    private int secondsLuminosity = 3;
-    private int secondsTemperature = 2;
+    private int secondsMovement = 1;
+    private int secondsLuminosity = 1;
+    private int secondsTemperature = 1;
     
     /** Creates new form Window */
     public SunSpotWindow(Connection conn) {

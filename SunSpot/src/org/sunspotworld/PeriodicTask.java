@@ -47,7 +47,7 @@ import com.sun.spot.service.IService;
 public abstract class PeriodicTask implements IService {
     
     private static final int DEFAULT_PERIOD = 10;
-    private static final double count_per_msec[] = { 7488, 1872, 468, 32.8 };
+    private static final double count_per_msec[] = { 7488, 1872, 468, 32.768 };
     private static final int max_duration[] = { 8, 35, 140, 2000 };
     private static final int clock[] = { TimerCounterBits.TC_CLKS_MCK8, 
                                          TimerCounterBits.TC_CLKS_MCK32,
@@ -63,7 +63,6 @@ public abstract class PeriodicTask implements IService {
     private String name = "Periodic Task Execution";
     protected int priority = Thread.NORM_PRIORITY;
     protected IAT91_TC timer = null;
-    private boolean first = true;
     
     /**
      * Creates a new instance of PeriodicTask.
@@ -160,19 +159,16 @@ public abstract class PeriodicTask implements IService {
             throw new IllegalStateException("Cannot change the task period for a running task loop.");
         }
         taskPeriod = period;
-        if(first) {
-            taskPeriodCount = 0;
-            clk_index = -1;
-            if (timer != null) {
-                for (int i = 0; i < clock.length; i++) {    // use fastest possible clock
-                    if (taskPeriod <= max_duration[i]) {
-                        clk_index = i;
-                        taskPeriodCount = (int)(taskPeriod * count_per_msec[clk_index]);
-                        break;
-                    }
+        taskPeriodCount = 0;
+        clk_index = -1;
+        if (timer != null) {
+            for (int i = 0; i < clock.length; i++) {    // use fastest possible clock
+                if (taskPeriod <= max_duration[i]) {
+                    clk_index = i;
+                    taskPeriodCount = (int)(taskPeriod * count_per_msec[clk_index]);
+                    break;
                 }
             }
-            first = false;
         }
     }
 
@@ -236,6 +232,7 @@ public abstract class PeriodicTask implements IService {
 
         while (status == RUNNING && thread == Thread.currentThread()) {
             if (clk_index >= 0) {
+                System.out.println("timers!");
                 timer.enableIrq(TimerCounterBits.TC_CPCS);  // Enable RC Compare interrupt
                 timer.waitForIrq();
                 int status = timer.status();          // Clear interrupt pending flag
@@ -247,6 +244,7 @@ public abstract class PeriodicTask implements IService {
                     timer.status();
                 }
             } else {
+                System.out.println("sleep!");
                 long sleep_for = sleep_til - System.currentTimeMillis();
                 if (sleep_for > 0) {
                     Utils.sleep(sleep_for);
@@ -258,15 +256,15 @@ public abstract class PeriodicTask implements IService {
                 }
                 sleep_til += taskPeriod;
             }
-
+            
             doTask();               // Perform periodic task defined in subclass
             
         }
-        status = STOPPED;
         if (clk_index >= 0) {
             timer.disable();
         }
         stopping();
+        status = STOPPED;
     }
 
 
@@ -308,8 +306,9 @@ public abstract class PeriodicTask implements IService {
             thread.setPriority(priority);
             thread.start();
             Thread.yield();
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**

@@ -6,10 +6,10 @@ import com.sun.spot.util.Utils;
 import java.io.IOException;
 
 public class TemperatureReader extends PeriodicTask {
-    private static int TEMPERATURE_PERIOD = 2000; // 2 seconds
+    private static int TEMPERATURE_PERIOD = 1000; // 1 seconds
     private static final double DELTA = 0.5;
     private static double lastValue = 0;
-    private ITemperatureInput tempInput = EDemoBoard.getInstance().getADCTemperature();
+    private ITemperatureInput tempInput = null;
     private Connection conn = null;
     private Sinalize sin = null;
     
@@ -18,7 +18,7 @@ public class TemperatureReader extends PeriodicTask {
             sin.setOn(Message.TEMPERATURE);
             double celsius = tempInput.getCelsius();
             if(MyUtils.betweenIntervalDoubleDelta(lastValue, DELTA, celsius))
-                System.out.println("Temparature in DELTA");
+                System.out.println("Temperature in DELTA");
             else {
                 conn.send(new Message(celsius));
                 lastValue = celsius;
@@ -36,8 +36,9 @@ public class TemperatureReader extends PeriodicTask {
     }
 
     public TemperatureReader(Connection c, Sinalize s) {
-        super(2, TEMPERATURE_PERIOD);
+        super(3, TEMPERATURE_PERIOD);
         conn = c;
         sin = s;
+        tempInput = EDemoBoard.getInstance().getADCTemperature();
     }
 }

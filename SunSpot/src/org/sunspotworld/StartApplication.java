@@ -20,12 +20,20 @@ public class StartApplication extends MIDlet {
     {
       if(!tasks.isEmpty()) {
             int i;
+            Vector toRemove = new Vector();
+            
             for(i = 0; i < tasks.size(); ++i) {
                 PeriodicTask task = (PeriodicTask)tasks.elementAt(i);
 
-                task.resume();
+                if(task.resume()) {
+                    System.out.println("Task " + i + " going to be removed");
+                    toRemove.addElement(task);
+                }
             }
-            tasks.removeAllElements();
+
+            for(i = 0; i < toRemove.size(); ++i) {
+                tasks.removeElement(toRemove.elementAt(i));
+            }
         }
 
         while(true) {
@@ -60,9 +68,9 @@ public class StartApplication extends MIDlet {
 
     protected void startApp() throws MIDletStateChangeException {
         /* start readers */
-        tempReader.start();
         lightReader.start();
         movReader.start();
+        tempReader.start();
 
         while(true) {
             listenLoop();

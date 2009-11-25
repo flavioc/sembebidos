@@ -6,7 +6,7 @@ import com.sun.spot.util.Utils;
 import java.io.IOException;
 
 public class MovementReader extends PeriodicTask {
-    private static int MOVEMENT_PERIOD = 4000; // 4 seconds
+    private static int MOVEMENT_PERIOD = 1000; // 1 seconds
     private static final double DELTA = 0.1;
     private static double lastValueX = 0;
     private static double lastValueY = 0;
@@ -42,7 +42,7 @@ public class MovementReader extends PeriodicTask {
     }
 
     public MovementReader(Connection c, Sinalize s) {
-        super(3, MOVEMENT_PERIOD);
+        super(2, MOVEMENT_PERIOD);
         conn = c;
         sin = s;
     }

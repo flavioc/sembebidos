@@ -6,7 +6,7 @@ import com.sun.spot.util.Utils;
 import java.io.IOException;
 
 public class LuminosityReader extends PeriodicTask {
-    private static int LUMINOSITY_PERIOD = 3000; // 3 seconds
+    private static int LUMINOSITY_PERIOD = 1000; // 1 seconds
     private static final int DELTA = 5;
     private static int lastValue = 0;
     private ILightSensor lightSensor = EDemoBoard.getInstance().getLightSensor();
