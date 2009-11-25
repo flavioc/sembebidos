@@ -7,6 +7,7 @@ package org.sunspotworld;
 import java.io.IOException;
 import javax.microedition.io.Datagram;
 import com.sun.spot.io.j2me.radiogram.RadiogramConnection;
+import com.sun.spot.util.IEEEAddress;
 
 /**
  *
