@@ -2,26 +2,11 @@ package org.sunspotworld;
 
 import java.awt.Color;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * Window.java
- *
- * Created on 6/Nov/2009, 12:28:45
- */
-
-/**
- *
- * @author flaviocruz
- */
 public class SunSpotWindow extends javax.swing.JFrame {
 
-    private int oldSecondsMovement = 4;
-    private int oldSecondsLuminosity = 3;
-    private int oldSecondsTemperature = 2;
+    private int oldSecondsMovement = 1;
+    private int oldSecondsLuminosity = 1;
+    private int oldSecondsTemperature = 1;
 
     private Connection sconn = null;
     

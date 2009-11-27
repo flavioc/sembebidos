@@ -27,12 +27,13 @@ public class StartApplication extends MIDlet {
     }
     
     protected void destroyApp(boolean unconditional) throws MIDletStateChangeException {
+        spotListen.stop();
         lightReader.stop();
         tempReader.stop();
         movReader.stop();
-        spotListen.stop();
+     
         
         conn.close();
-        Utils.sleep(500); // without the sleep, cleanup routines are not done properly
+        Utils.sleep(800); // without the sleep, cleanup routines are not done properly
     }
 }

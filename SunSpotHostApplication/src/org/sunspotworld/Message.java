@@ -1,18 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package org.sunspotworld;
+
 import java.io.IOException;
 import javax.microedition.io.Datagram;
 import com.sun.spot.io.j2me.radiogram.RadiogramConnection;
-import com.sun.spot.util.IEEEAddress;
 
-/**
- *
- * @author flaviocruz
- */
 public class Message {
     public final static int LUMINOSITY = 0;
     public final static int MOVEMENT = 1;
@@ -59,7 +51,6 @@ public class Message {
         addressString = dg.getAddress();
         address = dg.readLong();
 
-        //Long.toHexString(dg.readLong())
         timestamp = dg.readLong();
         type = dg.readInt();
 
@@ -112,6 +103,7 @@ public class Message {
                 break;
         }
 
-        return reading + " from " + addressString + ": " + val;
+        return timestamp + " " + reading +
+                " from " + addressString + ": " + val;
     }
 }
